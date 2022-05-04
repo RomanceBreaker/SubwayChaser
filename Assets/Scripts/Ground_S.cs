@@ -7,6 +7,7 @@ public class Ground_S : MonoBehaviour
     List<GameObject> Ground_List = new List<GameObject>(); //땅 List, 땅 지우기 용도
     public GameObject[] Ground_Normal;
     public GameObject[] Ground_Turn;
+    public GameObject[] Ground_Trap;
     Quaternion Map_Q;
     bool create;
     int remove_index;
@@ -17,10 +18,12 @@ public class Ground_S : MonoBehaviour
         Map_Q = Quaternion.Euler(new Vector3(0,0,0));
         Ground_List.Add(GameObject.Find("Start_Zone").gameObject);
         create = true;
+        /*
         for (int i = 0; i < 5; i++)
         {
             StartCoroutine("Ground_Create", 0f);
         }
+        */
     }
 
     void Update()
@@ -53,11 +56,15 @@ public class Ground_S : MonoBehaviour
 
     IEnumerator Ground_Create(float create_time) //땅 랜덤 생성 코루틴
     {
-        Debug.Log(Ground_List.Count);
+   
         yield return new WaitForSeconds(create_time);
         int Straight_or_Turn = Random.Range(0,5);
-        if(Straight_or_Turn < 3) //직진 붙이기
+        float trap_x = Random.Range(-2.5f, 2.5f);
+        float trap_z = Random.Range(-2.5f, 2.5f);
+
+        if (Straight_or_Turn < 3) //직진 붙이기
         {
+
             Debug.Log("Go");
             int Ground_index = Random.Range(0, Ground_Normal.Length);
 
@@ -70,29 +77,30 @@ public class Ground_S : MonoBehaviour
                     Map_Q));
             }
             else if (Map_Q == Quaternion.Euler(new Vector3(0, -90, 0)))
-            {
-
+            {   
                 Ground_List.Add(
-                Instantiate(Ground_Normal[Ground_index],
-                new Vector3(Ground_List[Ground_List.Count - 1].transform.GetChild(0).position.x - Ground_Normal[Ground_index].transform.GetChild(0).GetComponent<BoxCollider>().size.z, 0,
-                Ground_List[Ground_List.Count - 1].transform.GetChild(0).position.z),
-                Map_Q));
+                    Instantiate(Ground_Normal[Ground_index],
+                    new Vector3(Ground_List[Ground_List.Count - 1].transform.GetChild(0).position.x - Ground_Normal[Ground_index].transform.GetChild(0).GetComponent<BoxCollider>().size.z, 0,
+                    Ground_List[Ground_List.Count - 1].transform.GetChild(0).position.z),
+                    Map_Q));
 
 
             }
             else if (Map_Q == Quaternion.Euler(new Vector3(0, 90, 0)))
             {
-                //int k = (Ground_List[Ground_List.Count - 1] == GameObject.Find("Map_Go_Right").gameObject ? 2 : 0);
                 Ground_List.Add(
-                Instantiate(Ground_Normal[Ground_index],
-                new Vector3(Ground_List[Ground_List.Count - 1].transform.GetChild(0).position.x + Ground_Normal[Ground_index].transform.GetChild(0).GetComponent<BoxCollider>().size.z, 0,
-                Ground_List[Ground_List.Count - 1].transform.GetChild(0).position.z),
-                Map_Q));
+                    Instantiate(Ground_Normal[Ground_index],
+                    new Vector3(Ground_List[Ground_List.Count - 1].transform.GetChild(0).position.x + Ground_Normal[Ground_index].transform.GetChild(0).GetComponent<BoxCollider>().size.z, 0,
+                    Ground_List[Ground_List.Count - 1].transform.GetChild(0).position.z),
+                    Map_Q));
             }
+            Instantiate(Ground_Trap[Random.Range(0, 4)],
+                                    new Vector3(Ground_List[Ground_List.Count - 1].transform.position.x + trap_x, Ground_List[Ground_List.Count - 1].transform.position.y, Ground_List[Ground_List.Count - 1].transform.position.z + trap_z), Map_Q);
 
         }
         else
         {
+
             if (Map_Q == Quaternion.identity) //0,0,0 즉 Go인 상태
             {
                 int Turn_index = Random.Range(0, 2);
@@ -105,6 +113,10 @@ public class Ground_S : MonoBehaviour
                         Ground_List[Ground_List.Count - 1].transform.GetChild(0).position.z + Ground_Turn[0].transform.GetChild(0).GetComponent<BoxCollider>().size.z)
                         , Map_Q));
 
+                    Instantiate(Ground_Trap[Random.Range(0, 4)],
+                        new Vector3(Ground_List[Ground_List.Count - 1].transform.position.x + trap_x, Ground_List[Ground_List.Count - 1].transform.position.y, Ground_List[Ground_List.Count - 1].transform.position.z + trap_z), Map_Q);
+
+
                     Map_Q = Quaternion.Euler(new Vector3(0, -90, 0));
                 }
                 else if (Turn_index == 1) //Go_Right
@@ -115,6 +127,9 @@ public class Ground_S : MonoBehaviour
                         new Vector3(Ground_List[Ground_List.Count - 1].transform.GetChild(0).position.x, 0,
                         Ground_List[Ground_List.Count - 1].transform.GetChild(0).position.z + Ground_Turn[2].transform.GetChild(0).GetComponent<BoxCollider>().size.z)
                         , Map_Q));
+
+                    Instantiate(Ground_Trap[Random.Range(0, 4)],
+                        new Vector3(Ground_List[Ground_List.Count - 1].transform.position.x + trap_x, Ground_List[Ground_List.Count - 1].transform.position.y, Ground_List[Ground_List.Count - 1].transform.position.z + trap_z), Map_Q);
 
                     Map_Q = Quaternion.Euler(new Vector3(0, 90, 0));
                 }
@@ -130,6 +145,9 @@ public class Ground_S : MonoBehaviour
                     Ground_List[Ground_List.Count - 1].transform.GetChild(0).transform.position.z)
                     , Map_Q));
 
+                Instantiate(Ground_Trap[Random.Range(0, 4)],
+                        new Vector3(Ground_List[Ground_List.Count - 1].transform.position.x + trap_x, Ground_List[Ground_List.Count - 1].transform.position.y, Ground_List[Ground_List.Count - 1].transform.position.z + trap_z), Map_Q);
+
                 Map_Q = Quaternion.Euler(new Vector3(0, 0, 0));
 
             }
@@ -143,12 +161,16 @@ public class Ground_S : MonoBehaviour
                     Ground_List[Ground_List.Count - 1].transform.GetChild(0).transform.position.z)
                     , Map_Q));
 
+                Instantiate(Ground_Trap[Random.Range(0, 4)],
+                        new Vector3(Ground_List[Ground_List.Count - 1].transform.position.x + trap_x, Ground_List[Ground_List.Count - 1].transform.position.y, Ground_List[Ground_List.Count - 1].transform.position.z + trap_z), Map_Q);
+
                 Map_Q = Quaternion.Euler(new Vector3(0, 0, 0));
             }
 
         }
 
         create = true;
+
     }
 
 }
