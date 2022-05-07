@@ -5,18 +5,18 @@ using UnityEngine;
 public class Spawner : MonoBehaviour
 {
     public Note note;
-    public Vector3 startPos;        // Ã³À½ ½ÃÀÛ ½Ã spawner position
-    public Vector3 currPos;       // updateµÇ´Â spawnerÀÇ random position
+    public Vector3 startPos;            // ì²˜ìŒ ì‹œì‘ ì‹œ spawner position
+    public Vector3 currPos;             // updateë˜ëŠ” spawnerì˜ random position
 
     public Transform hitTrans;
-    public Transform noteParent;
     public Transform playerTrans;
+    public Transform noteParent;        // í•˜ì´ì–´ë¼í‚¤ì°½ì— cloneëœ noteë“¤ì„ ê´€ë¦¬í•˜ëŠ” parent
 
     private bool canShoot;
 
     void Start()
     {
-        startPos = transform.localPosition;     // 0, 6, 20 °íÁ¤
+        startPos = transform.localPosition;     // 0, 6, 20 ê³ ì •
         canShoot = true;
     }
 
@@ -32,14 +32,11 @@ public class Spawner : MonoBehaviour
     {
         canShoot = false;
         currPos = startPos + new Vector3(Random.Range(-5f, 5f), Random.Range(-3f, 3f), 0f);
-        //Debug.Log(currPos.position);
 
         Note noteTemp = Instantiate(note, noteParent);
         noteTemp.Init(currPos, hitTrans.localPosition, playerTrans.eulerAngles);
-        
-        //Note note = Instantiate(note, currPos.transform.position, currPos.transform.rotation);
 
-        yield return new WaitForSeconds(1.0f);      // 1ÃÊ¸¶´Ù »ı¼º
+        yield return new WaitForSeconds(1.0f);      // 1ì´ˆë§ˆë‹¤ ìƒì„±
         canShoot = true;
     }
 }
