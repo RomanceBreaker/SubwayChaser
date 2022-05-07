@@ -431,6 +431,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gravity: 9.8
   firingAngle: 45
+
+=
   startPos: {x: 0, y: 0, z: 0}
   endPos: {x: 0, y: 0, z: 0}
   angle: {x: 0, y: 0, z: 0}
