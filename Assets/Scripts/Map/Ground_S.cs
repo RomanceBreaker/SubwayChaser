@@ -12,35 +12,24 @@ public class Ground_S : MonoBehaviour
     public GameObject Plane;
     Quaternion Map_Q;
     bool create;
-    bool start_window;
     public float create_time;
-    public float start_time;
 
     void Start()
     {
         Map_Q = Quaternion.Euler(new Vector3(0,0,0));
-        Ground_List.Add(GameObject.Find("Start_Zone").gameObject);
+        Ground_List.Add(GameObject.Find("Base_10").gameObject);
         create = true;
-        start_window = false;
-        GameObject.Find("Player").GetComponent<PlayerMovement>().enabled = false;
-        StartCoroutine("Start_Window", start_time);
+       // GameObject.Find("Player").GetComponent<PlayerMovement>().enabled = false;
 
     }
 
     void Update()
     {
 
-        if (start_window)
-        {
-            Create_Ground();
-            Remove_Ground();
-            Plane_Move();
-        }
-        else
-        {
-            GameObject.Find("Train").transform.position += Vector3.forward;
-        }
-
+        Create_Ground();
+        Remove_Ground();
+        Plane_Move();
+        
     }
 
     void Create_Ground()
@@ -56,21 +45,14 @@ public class Ground_S : MonoBehaviour
     {
         if (Ground_List.Count >= 10)
         {
-            Ground_List.RemoveAt(0);
-            Destroy(Ground_List[0].gameObject);
 
-            Trap_List.RemoveAt(0);
+            Destroy(Ground_List[0].gameObject);
+            Ground_List.RemoveAt(0);
+
             Destroy(Trap_List[0].gameObject);
+            Trap_List.RemoveAt(0);
         }
         
-    }
-
-
-    IEnumerator Start_Window(float start_time)
-    {
-        yield return new WaitForSeconds(start_time);
-        start_window = true;
-        GameObject.Find("Player").GetComponent<PlayerMovement>().enabled = true;
     }
 
 
