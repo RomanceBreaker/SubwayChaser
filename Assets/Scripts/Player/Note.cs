@@ -59,9 +59,11 @@ public class Note : MonoBehaviour
 
         if (Physics.Raycast(ray, out hitObj, Mathf.Infinity))
         {
-            Debug.Log("bamm!");
-            Destroy(hitObj.collider.gameObject);
-
+            if (hitObj.collider.tag == "Note")
+            {
+                Debug.Log("bamm!");
+                Destroy(hitObj.collider.gameObject);
+            }
         }
     }
 }
